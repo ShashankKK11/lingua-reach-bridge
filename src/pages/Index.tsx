@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
 import { TrendingUp, Globe, FileText, Mic, Users, Activity, ArrowUp, ArrowDown } from "lucide-react";
+import CampaignManager from "@/components/CampaignManager";
+import NotificationCenter from "@/components/NotificationCenter";
+import APIIntegration from "@/components/APIIntegration";
 
 const Index = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
@@ -162,6 +164,15 @@ const Index = () => {
             </TabsTrigger>
             <TabsTrigger value="regions" className="data-[state=active]:bg-blue-600">
               Regional Analysis
+            </TabsTrigger>
+            <TabsTrigger value="campaigns" className="data-[state=active]:bg-blue-600">
+              Campaign Manager
+            </TabsTrigger>
+            <TabsTrigger value="notifications" className="data-[state=active]:bg-blue-600">
+              Notifications
+            </TabsTrigger>
+            <TabsTrigger value="api" className="data-[state=active]:bg-blue-600">
+              API Integration
             </TabsTrigger>
           </TabsList>
 
@@ -408,6 +419,18 @@ const Index = () => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="campaigns" className="space-y-6">
+            <CampaignManager />
+          </TabsContent>
+
+          <TabsContent value="notifications" className="space-y-6">
+            <NotificationCenter />
+          </TabsContent>
+
+          <TabsContent value="api" className="space-y-6">
+            <APIIntegration />
           </TabsContent>
         </Tabs>
       </div>
