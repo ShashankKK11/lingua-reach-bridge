@@ -258,7 +258,7 @@ const Index = () => {
                     <div>
                       <div className="text-lg font-semibold text-white">Voice Input</div>
                       <div className="text-sm text-slate-400">32% of total conversions</div>
-                      <div className="text-xs text-blue-400">WER: <15% accuracy</div>
+                      <div className="text-xs text-blue-400">WER: &lt;15% accuracy</div>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3 p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
