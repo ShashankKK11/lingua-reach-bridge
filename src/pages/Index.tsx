@@ -4,13 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { TrendingUp, Globe, FileText, Mic, Users, Activity, ArrowUp, ArrowDown, Download, FileDown, Database } from "lucide-react";
+import { TrendingUp, Globe, FileText, Mic, Users, Activity, ArrowUp, ArrowDown } from "lucide-react";
 import CampaignManager from "@/components/CampaignManager";
 import NotificationCenter from "@/components/NotificationCenter";
 import APIIntegration from "@/components/APIIntegration";
-import { exportToPDF, exportToCSV, exportToJSON } from "@/utils/exportUtils";
 
 const Index = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
@@ -22,59 +20,15 @@ const Index = () => {
   const successRate = 94.7;
   const activeLanguages = 34;
 
-  // Dynamic data based on selected period
-  const getConversionData = () => {
-    if (selectedPeriod === "1d") {
-      return [
-        { date: "00:00", voice: 45, text: 78, file: 12 },
-        { date: "03:00", voice: 23, text: 34, file: 8 },
-        { date: "06:00", voice: 89, text: 156, file: 23 },
-        { date: "09:00", voice: 234, text: 445, file: 67 },
-        { date: "12:00", voice: 312, text: 598, file: 89 },
-        { date: "15:00", voice: 278, text: 523, file: 78 },
-        { date: "18:00", voice: 345, text: 634, file: 98 },
-        { date: "21:00", voice: 189, text: 298, file: 45 },
-      ];
-    } else {
-      return [
-        { date: "Mon", voice: 1200, text: 2300, file: 800 },
-        { date: "Tue", voice: 1400, text: 2100, file: 950 },
-        { date: "Wed", voice: 1100, text: 2500, file: 750 },
-        { date: "Thu", voice: 1600, text: 2200, file: 1100 },
-        { date: "Fri", voice: 1800, text: 2800, file: 1200 },
-        { date: "Sat", voice: 2200, text: 3200, file: 1400 },
-        { date: "Sun", voice: 2000, text: 2900, file: 1300 },
-      ];
-    }
-  };
-
-  const getPerformanceData = () => {
-    if (selectedPeriod === "1d") {
-      return [
-        { hour: "00", conversions: 135 },
-        { hour: "03", conversions: 65 },
-        { hour: "06", conversions: 268 },
-        { hour: "09", conversions: 746 },
-        { hour: "12", conversions: 999 },
-        { hour: "15", conversions: 879 },
-        { hour: "18", conversions: 1077 },
-        { hour: "21", conversions: 532 },
-      ];
-    } else {
-      return [
-        { hour: "Mon", conversions: 4200 },
-        { hour: "Tue", conversions: 4450 },
-        { hour: "Wed", conversions: 4350 },
-        { hour: "Thu", conversions: 4900 },
-        { hour: "Fri", conversions: 5800 },
-        { hour: "Sat", conversions: 6800 },
-        { hour: "Sun", conversions: 6200 },
-      ];
-    }
-  };
-
-  const conversionData = getConversionData();
-  const performanceData = getPerformanceData();
+  const conversionData = [
+    { date: "Mon", voice: 1200, text: 2300, file: 800 },
+    { date: "Tue", voice: 1400, text: 2100, file: 950 },
+    { date: "Wed", voice: 1100, text: 2500, file: 750 },
+    { date: "Thu", voice: 1600, text: 2200, file: 1100 },
+    { date: "Fri", voice: 1800, text: 2800, file: 1200 },
+    { date: "Sat", voice: 2200, text: 3200, file: 1400 },
+    { date: "Sun", voice: 2000, text: 2900, file: 1300 },
+  ];
 
   const languagePairData = [
     { source: "English", target: "Hindi", count: 8500, accuracy: 96.2 },
@@ -92,33 +46,14 @@ const Index = () => {
     { region: "East India", value: 15, color: "#ef4444" },
   ];
 
-  const handleExport = (format: 'pdf' | 'csv' | 'json') => {
-    const exportData = {
-      totalConversions,
-      successRate,
-      activeLanguages,
-      languagePairs: languagePairData,
-      conversions: conversionData,
-      regions: regionData,
-      performance: performanceData,
-      exportDate: new Date().toISOString(),
-      period: selectedPeriod
-    };
-
-    const filename = `linguabridge-report-${selectedPeriod}-${new Date().toISOString().split('T')[0]}`;
-
-    switch (format) {
-      case 'pdf':
-        exportToPDF(exportData, filename);
-        break;
-      case 'csv':
-        exportToCSV(exportData, filename);
-        break;
-      case 'json':
-        exportToJSON(exportData, filename);
-        break;
-    }
-  };
+  const performanceData = [
+    { hour: "00", conversions: 245 },
+    { hour: "04", conversions: 189 },
+    { hour: "08", conversions: 1200 },
+    { hour: "12", conversions: 1800 },
+    { hour: "16", conversions: 2100 },
+    { hour: "20", conversions: 1600 },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
@@ -149,28 +84,9 @@ const Index = () => {
                   <SelectItem value="90d">Last 90 days</SelectItem>
                 </SelectContent>
               </Select>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Download className="h-4 w-4 mr-2" />
-                    Export Report
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="bg-slate-800 border-slate-700">
-                  <DropdownMenuItem onClick={() => handleExport('pdf')} className="text-white hover:bg-slate-700">
-                    <FileDown className="h-4 w-4 mr-2" />
-                    Export as PDF
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport('csv')} className="text-white hover:bg-slate-700">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Export as CSV
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleExport('json')} className="text-white hover:bg-slate-700">
-                    <Database className="h-4 w-4 mr-2" />
-                    Export as JSON
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                Export Report
+              </Button>
             </div>
           </div>
         </div>
@@ -266,7 +182,7 @@ const Index = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <BarChart className="h-5 w-5 text-blue-400" />
-                    <span>{selectedPeriod === "1d" ? "Hourly" : "Daily"} Conversion Volume</span>
+                    <span>Daily Conversion Volume</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -415,7 +331,7 @@ const Index = () => {
           <TabsContent value="performance" className="space-y-6">
             <Card className="bg-slate-800/50 border-slate-700 backdrop-blur">
               <CardHeader>
-                <CardTitle>{selectedPeriod === "1d" ? "Hourly" : "Daily"} Performance Analysis</CardTitle>
+                <CardTitle>Hourly Performance Analysis</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
