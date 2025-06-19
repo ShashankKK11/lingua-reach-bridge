@@ -22,15 +22,59 @@ const Index = () => {
   const successRate = 94.7;
   const activeLanguages = 34;
 
-  const conversionData = [
-    { date: "Mon", voice: 1200, text: 2300, file: 800 },
-    { date: "Tue", voice: 1400, text: 2100, file: 950 },
-    { date: "Wed", voice: 1100, text: 2500, file: 750 },
-    { date: "Thu", voice: 1600, text: 2200, file: 1100 },
-    { date: "Fri", voice: 1800, text: 2800, file: 1200 },
-    { date: "Sat", voice: 2200, text: 3200, file: 1400 },
-    { date: "Sun", voice: 2000, text: 2900, file: 1300 },
-  ];
+  // Dynamic data based on selected period
+  const getConversionData = () => {
+    if (selectedPeriod === "1d") {
+      return [
+        { date: "00:00", voice: 45, text: 78, file: 12 },
+        { date: "03:00", voice: 23, text: 34, file: 8 },
+        { date: "06:00", voice: 89, text: 156, file: 23 },
+        { date: "09:00", voice: 234, text: 445, file: 67 },
+        { date: "12:00", voice: 312, text: 598, file: 89 },
+        { date: "15:00", voice: 278, text: 523, file: 78 },
+        { date: "18:00", voice: 345, text: 634, file: 98 },
+        { date: "21:00", voice: 189, text: 298, file: 45 },
+      ];
+    } else {
+      return [
+        { date: "Mon", voice: 1200, text: 2300, file: 800 },
+        { date: "Tue", voice: 1400, text: 2100, file: 950 },
+        { date: "Wed", voice: 1100, text: 2500, file: 750 },
+        { date: "Thu", voice: 1600, text: 2200, file: 1100 },
+        { date: "Fri", voice: 1800, text: 2800, file: 1200 },
+        { date: "Sat", voice: 2200, text: 3200, file: 1400 },
+        { date: "Sun", voice: 2000, text: 2900, file: 1300 },
+      ];
+    }
+  };
+
+  const getPerformanceData = () => {
+    if (selectedPeriod === "1d") {
+      return [
+        { hour: "00", conversions: 135 },
+        { hour: "03", conversions: 65 },
+        { hour: "06", conversions: 268 },
+        { hour: "09", conversions: 746 },
+        { hour: "12", conversions: 999 },
+        { hour: "15", conversions: 879 },
+        { hour: "18", conversions: 1077 },
+        { hour: "21", conversions: 532 },
+      ];
+    } else {
+      return [
+        { hour: "Mon", conversions: 4200 },
+        { hour: "Tue", conversions: 4450 },
+        { hour: "Wed", conversions: 4350 },
+        { hour: "Thu", conversions: 4900 },
+        { hour: "Fri", conversions: 5800 },
+        { hour: "Sat", conversions: 6800 },
+        { hour: "Sun", conversions: 6200 },
+      ];
+    }
+  };
+
+  const conversionData = getConversionData();
+  const performanceData = getPerformanceData();
 
   const languagePairData = [
     { source: "English", target: "Hindi", count: 8500, accuracy: 96.2 },
@@ -46,15 +90,6 @@ const Index = () => {
     { region: "South India", value: 28, color: "#10b981" },
     { region: "West India", value: 22, color: "#f59e0b" },
     { region: "East India", value: 15, color: "#ef4444" },
-  ];
-
-  const performanceData = [
-    { hour: "00", conversions: 245 },
-    { hour: "04", conversions: 189 },
-    { hour: "08", conversions: 1200 },
-    { hour: "12", conversions: 1800 },
-    { hour: "16", conversions: 2100 },
-    { hour: "20", conversions: 1600 },
   ];
 
   const handleExport = (format: 'pdf' | 'csv' | 'json') => {
@@ -231,7 +266,7 @@ const Index = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <BarChart className="h-5 w-5 text-blue-400" />
-                    <span>Daily Conversion Volume</span>
+                    <span>{selectedPeriod === "1d" ? "Hourly" : "Daily"} Conversion Volume</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -380,7 +415,7 @@ const Index = () => {
           <TabsContent value="performance" className="space-y-6">
             <Card className="bg-slate-800/50 border-slate-700 backdrop-blur">
               <CardHeader>
-                <CardTitle>Hourly Performance Analysis</CardTitle>
+                <CardTitle>{selectedPeriod === "1d" ? "Hourly" : "Daily"} Performance Analysis</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
