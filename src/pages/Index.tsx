@@ -4,11 +4,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from "recharts";
-import { TrendingUp, Globe, FileText, Mic, Users, Activity, ArrowUp, ArrowDown } from "lucide-react";
+import { TrendingUp, Globe, FileText, Mic, Users, Activity, ArrowUp, ArrowDown, Download, FileDown, Database } from "lucide-react";
 import CampaignManager from "@/components/CampaignManager";
 import NotificationCenter from "@/components/NotificationCenter";
 import APIIntegration from "@/components/APIIntegration";
+import { exportToPDF, exportToCSV, exportToJSON } from "@/utils/exportUtils";
 
 const Index = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("7d");
@@ -55,6 +57,34 @@ const Index = () => {
     { hour: "20", conversions: 1600 },
   ];
 
+  const handleExport = (format: 'pdf' | 'csv' | 'json') => {
+    const exportData = {
+      totalConversions,
+      successRate,
+      activeLanguages,
+      languagePairs: languagePairData,
+      conversions: conversionData,
+      regions: regionData,
+      performance: performanceData,
+      exportDate: new Date().toISOString(),
+      period: selectedPeriod
+    };
+
+    const filename = `linguabridge-report-${selectedPeriod}-${new Date().toISOString().split('T')[0]}`;
+
+    switch (format) {
+      case 'pdf':
+        exportToPDF(exportData, filename);
+        break;
+      case 'csv':
+        exportToCSV(exportData, filename);
+        break;
+      case 'json':
+        exportToJSON(exportData, filename);
+        break;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
       {/* Header */}
@@ -84,9 +114,28 @@ const Index = () => {
                   <SelectItem value="90d">Last 90 days</SelectItem>
                 </SelectContent>
               </Select>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                Export Report
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export Report
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-slate-800 border-slate-700">
+                  <DropdownMenuItem onClick={() => handleExport('pdf')} className="text-white hover:bg-slate-700">
+                    <FileDown className="h-4 w-4 mr-2" />
+                    Export as PDF
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport('csv')} className="text-white hover:bg-slate-700">
+                    <FileText className="h-4 w-4 mr-2" />
+                    Export as CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport('json')} className="text-white hover:bg-slate-700">
+                    <Database className="h-4 w-4 mr-2" />
+                    Export as JSON
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
